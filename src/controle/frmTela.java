@@ -35,11 +35,66 @@ public class frmTela extends JFrame {
 	private JTextField txbCod;
 	private JTextField txbTelef;
 	private JTextField txbEmail;
-	private JTable table;
+	private JTable tblClientes;
 
 	/**
 	 * Launch the application.
 	 */
+	
+	/*Método para preencher a Jtable com os dados da tabela "tblclientes" do banco de dados*/
+	public void preencherTabela() {
+		tblClientes.getColumnModel().getColumn(0).setPreferredWidth(4);
+		tblClientes.getColumnModel().getColumn(1).setPreferredWidth(150);
+		tblClientes.getColumnModel().getColumn(2).setPreferredWidth(11);
+		tblClientes.getColumnModel().getColumn(3).setPreferredWidth(14);
+		tblClientes.getColumnModel().getColumn(4).setPreferredWidth(100);
+		
+		DefaultTableModel modelo = (DefaultTableModel) tblClientes.getModel();
+		modelo.setNumRows(0);
+		
+		try {
+			con_cliente.resultSet.beforeFirst();
+			while(con_cliente.resultSet.next()) {
+				modelo.addRow(new Object[] {
+						con_cliente.resultSet.getString("cod"),
+						con_cliente.resultSet.getString("nome"),
+						con_cliente.resultSet.getString("dt_nasc"),
+						con_cliente.resultSet.getString("telefone"),
+						con_cliente.resultSet.getString("email")
+				});
+			}
+			
+		}catch(SQLException erro) {
+			JOptionPane.showMessageDialog(null, "\nErro ao listar dados da tabela:\n\n" + erro, con_cliente.getTitJOptionPane(), 0);
+		}
+	}
+	
+	/*Método para mostrar os dados da tabela "tbclientes" nas JTextField do formulário*/
+	public void mostrar_Dados() {
+		try {
+			txbCod.setText(con_cliente.resultSet.getString("cod"));//Código
+			txbNome.setText(con_cliente.resultSet.getString("nome"));//Nome
+			txbDtNasc.setText(con_cliente.resultSet.getString("dt_nasc"));//Data de Nascimento
+			txbTelef.setText(con_cliente.resultSet.getString("telefone"));//Telefone
+			txbEmail.setText(con_cliente.resultSet.getString("email"));//E-mail
+			
+		}catch(SQLException erro) {
+			JOptionPane.showMessageDialog(null, "Não localizou dados:\n\n" + erro, con_cliente.getTitJOptionPane(), 0);
+		}
+	}
+	
+	/*Método para mostrar os dados do 1º registro da tabela "tbclientes" nas JTextField do formulário*/
+	public void posicionarRegistro() {
+		try {
+			con_cliente.resultSet.first();//posiciona no 1º registro
+			mostrar_Dados();//buscando e mostrando os dados
+			
+		}catch(SQLException erro) {
+			JOptionPane.showMessageDialog(null, "Não foi possível posicionar no primeiro registro:\n\n" + erro, con_cliente.getTitJOptionPane(), 0);
+		}
+	}
+	
+	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -156,8 +211,8 @@ public class frmTela extends JFrame {
 					.addGap(25))
 		);
 		
-		table = new JTable();
-		table.setModel(new DefaultTableModel(
+		tblClientes = new JTable();
+		tblClientes.setModel(new DefaultTableModel(
 			new Object[][] {
 				{null, null, null, null, null},
 			},
@@ -172,12 +227,16 @@ public class frmTela extends JFrame {
 				return columnEditables[column];
 			}
 		});
-		table.getColumnModel().getColumn(2).setPreferredWidth(137);
-		scrollPane.setViewportView(table);
+		tblClientes.getColumnModel().getColumn(2).setPreferredWidth(137);
+		scrollPane.setViewportView(tblClientes);
 		contentPane.setLayout(gl_contentPane);
 		
 		/*Estabelecendo Conexão*/
 		con_cliente = new Conexao();//Iniciando instância
 		con_cliente.conecta();//Realizando conexão com a fonte de dados (MySQL)
+		con_cliente.executaSQL("select * from tbclientes order by cod");
+		preencherTabela();
+		posicionarRegistro();
+		tblClientes.setAutoCreateRowSorter(true);//ativando a classificação ordenada da tabela
 	}
 }
