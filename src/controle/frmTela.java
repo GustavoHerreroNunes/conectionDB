@@ -33,6 +33,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
+import java.awt.Toolkit;
 
 public class frmTela extends JFrame {
 
@@ -121,6 +122,7 @@ public class frmTela extends JFrame {
 	 * Create the frame.
 	 */
 	public frmTela() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(frmTela.class.getResource("/img/icons/logo.png")));
 		setResizable(false);
 		setTitle("Cadastro de Clientes");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -305,20 +307,46 @@ public class frmTela extends JFrame {
 		
 		/*Botão que limpa os campos para digitação de novo registro*/
 		JButton btnNew = new JButton("");
-		btnNew.setBounds(519, 338, 33, 33);
+		btnNew.setBorder(null);
+		btnNew.setIcon(new ImageIcon(frmTela.class.getResource("/img/icons/new.png")));
+		btnNew.setBounds(517, 338, 33, 33);
 		btnNew.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				txbCod.setText("");
+				txbNome.setText("");
+				txbDtNasc.setText("");
+				txbTelef.setText("");
+				txbEmail.setText("");
 				
+				txbCod.requestFocus();//"Foca" essa campo, posicionando o cursor nele para digitação
 			}
 		});
 		btnNew.setBackground(SystemColor.controlHighlight);
 		
 		/*Botão que cadastra novo registro digitado*/
 		JButton btnSubmit = new JButton("");
-		btnSubmit.setBounds(562, 338, 33, 33);
+		btnSubmit.setIcon(new ImageIcon(frmTela.class.getResource("/img/icons/submit.png")));
+		btnSubmit.setBorder(null);
+		btnSubmit.setBounds(560, 338, 33, 33);
 		btnSubmit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				String nome = txbNome.getText();
+				String dtNasc = txbDtNasc.getText();
+				String telef = txbTelef.getText();
+				String email = txbEmail.getText();
 				
+				try {
+					String insert_sql = "insert into tbclientes (nome, telefone, email, dt_nasc) values ('" + nome + "','" + telef + "','" + email + "','" + dtNasc + "')";
+					con_cliente.statement.executeUpdate(insert_sql);
+					JOptionPane.showMessageDialog(null, "Gravação realizada com sucesso!!", con_cliente.getTitJOptionPane(), 1);
+					con_cliente.executaSQL("select * from tbclientes order by cod");
+					con_cliente.resultSet.first();
+					preencherTabela();
+					mostrar_Dados();
+					
+				}catch(SQLException erro) {
+					JOptionPane.showMessageDialog(null, "Erro na gravação:\n" + erro, con_cliente.getTitJOptionPane(), 0);
+				}
 			}
 		});
 		btnSubmit.setBackground(SystemColor.controlHighlight);
@@ -326,9 +354,37 @@ public class frmTela extends JFrame {
 		
 		/*Botão que altera registro existente, ou cadastra novo em caso de código (cod) não preenchido*/
 		JButton btnChange = new JButton("");
+		btnChange.setIcon(new ImageIcon(frmTela.class.getResource("/img/icons/change.png")));
+		btnChange.setBorder(null);
 		btnChange.setBounds(603, 338, 33, 33);
 		btnChange.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				String nome = txbNome.getText();
+				String dtNasc = txbDtNasc.getText();
+				String telef = txbTelef.getText();
+				String email = txbEmail.getText();
+				
+				try {
+					String sql ="", msg = "";
+					
+					if(txbCod.getText().equals("")) {
+						sql = "insert into tbclientes (nome, telefone, email, dt_nasc) values ('" + nome + "','" + telef + "','" + email + "','" + dtNasc + "')";
+						msg = "Gravação de um novo registro";
+					}else {
+						sql = "update tbclientes set nome='" + nome + "', telefone='" + telef + "', email='" +  email + "', dt_nasc='" + email + "' where cod = " + txbCod.getText();
+					}
+					
+					con_cliente.statement.executeUpdate(sql);
+					JOptionPane.showMessageDialog(null, msg, con_cliente.getTitJOptionPane(), 1);
+					
+					con_cliente.executaSQL("select * from tbclientes order by cod");
+					con_cliente.resultSet.first();
+					preencherTabela();
+					mostrar_Dados();
+					
+				}catch(SQLException erro) {
+					JOptionPane.showMessageDialog(null, "Erro na gravação:\n" + erro, con_cliente.getTitJOptionPane(), 0);	
+				}
 				
 			}
 		});
@@ -336,9 +392,33 @@ public class frmTela extends JFrame {
 		
 		/*Botão quer deleta registro existente*/
 		JButton btnDelete = new JButton("");
+		btnDelete.setIcon(new ImageIcon(frmTela.class.getResource("/img/icons/delete.png")));
+		btnDelete.setBorder(null);
 		btnDelete.setBounds(646, 338, 33, 33);
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				try {
+					String sql ="";
+					int resp = JOptionPane.showConfirmDialog(rootPane, "Deseja excluir o registro:\n", con_cliente.getTitJOptionPane(), 1, 0);
+					
+					if(resp == 0) {
+						sql = "delete from tbclientes where cod = " + txbCod.getText();
+						int excluir = con_cliente.statement.executeUpdate(sql);
+						
+						if(excluir == 1) {
+							JOptionPane.showMessageDialog(null, "Exclusão realizada com sucesso!!", con_cliente.getTitJOptionPane(), 1);
+							con_cliente.executaSQL("select * from tbclientes order by cod");
+							con_cliente.resultSet.first();
+							preencherTabela();
+							posicionarRegistro();
+						}else {
+							JOptionPane.showMessageDialog(null, "Operação cancelada pelo usuário", con_cliente.getTitJOptionPane(), 1);
+						}
+					}
+					
+				}catch(SQLException erro) {
+					JOptionPane.showMessageDialog(null, "Erro na exclusão:\n" + erro, con_cliente.getTitJOptionPane(), 0);
+				}
 				
 			}
 		});
@@ -346,6 +426,8 @@ public class frmTela extends JFrame {
 		
 		/*Botão que fecha a aplicação*/
 		JButton btnExit = new JButton("");
+		btnExit.setIcon(new ImageIcon(frmTela.class.getResource("/img/icons/exit.png")));
+		btnExit.setBorder(null);
 		btnExit.setBounds(882, 338, 33, 33);
 		btnExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -359,6 +441,19 @@ public class frmTela extends JFrame {
 		txbSearch.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
+				try {
+					String search = "select * from tbclientes where nome like '" + txbSearch.getText() + "%'";
+					con_cliente.executaSQL(search);
+					
+					if(con_cliente.resultSet.first()) {
+						preencherTabela();
+					}else {
+						JOptionPane.showMessageDialog(null, "Não existem dados com este parâmetro!!", con_cliente.getTitJOptionPane(), 1);
+					}
+					
+				}catch(SQLException erro) {
+					JOptionPane.showMessageDialog(null, "Os dados digitados não foram localizados:\n" + erro, con_cliente.getTitJOptionPane(), 0);
+				}
 			}
 		});
 		txbSearch.setBounds(309, 729, 319, 24);

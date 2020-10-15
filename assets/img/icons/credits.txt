@@ -1,4 +1,0 @@
-{last.png,
-first.png,
-next.png
-previous.png}: Ícones feitos por srip (https://www.flaticon.com/br/icone-gratis/frente_1262155) de www.flaticon.com

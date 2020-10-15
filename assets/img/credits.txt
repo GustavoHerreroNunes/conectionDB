@@ -1,0 +1,10 @@
+{last.png,
+first.png,
+next.png
+previous.png,
+new.png,
+change.png,
+submit.png,
+delete.png,
+exit.png,
+logo.png}: Ícones feitos por srip (https://www.flaticon.com/br/icone-gratis/frente_1262155) de www.flaticon.com
