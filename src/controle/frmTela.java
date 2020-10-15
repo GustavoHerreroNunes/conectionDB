@@ -44,6 +44,7 @@ public class frmTela extends JFrame {
 	private JTextField txbTelef;
 	private JTextField txbEmail;
 	private JTable tblClientes;
+	private JTextField txbSearch;
 
 	/**
 	 * Launch the application.
@@ -123,7 +124,7 @@ public class frmTela extends JFrame {
 		setResizable(false);
 		setTitle("Cadastro de Clientes");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(0, 0, 950, 765);
+		setBounds(0, 0, 950, 805);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBackground(SystemColor.controlHighlight);
@@ -131,43 +132,61 @@ public class frmTela extends JFrame {
 		setContentPane(contentPane);
 		
 		JLabel lblCod = new JLabel("C\u00F3digo:");
+		lblCod.setBounds(69, 82, 67, 23);
 		lblCod.setFont(new Font("Arial", Font.PLAIN, 19));
 		
 		JLabel lblNome = new JLabel("Nome:");
+		lblNome.setBounds(69, 136, 56, 23);
 		lblNome.setFont(new Font("Arial", Font.PLAIN, 19));
 		
 		JLabel lblDtNasc = new JLabel("Data de Nascimento:");
+		lblDtNasc.setBounds(69, 185, 176, 23);
 		lblDtNasc.setFont(new Font("Arial", Font.PLAIN, 19));
 		
 		JLabel lblTelef = new JLabel("Telefone:");
+		lblTelef.setBounds(69, 234, 81, 23);
 		lblTelef.setFont(new Font("Arial", Font.PLAIN, 19));
 		
 		JLabel lblEmail = new JLabel("Email:");
+		lblEmail.setBounds(69, 276, 56, 23);
 		lblEmail.setFont(new Font("Arial", Font.PLAIN, 19));
 		
+		/*Caixa de texto correspondente ao campo "dt_nasc" da tabela*/
 		txbDtNasc = new JTextField();
+		txbDtNasc.setBounds(245, 185, 434, 24);
 		txbDtNasc.setFont(new Font("Arial", Font.PLAIN, 16));
 		txbDtNasc.setColumns(10);
 		
+		/*Caixa de texto correspondente ao campo "nome" da tabela*/
 		txbNome = new JTextField();
+		txbNome.setBounds(245, 136, 434, 24);
 		txbNome.setFont(new Font("Arial", Font.PLAIN, 16));
 		txbNome.setColumns(10);
 		
+		/*Caixa de texto correspondente ao campo "cod" da tabela*/
 		txbCod = new JTextField();
+		txbCod.setBounds(245, 82, 434, 24);
 		txbCod.setFont(new Font("Arial", Font.PLAIN, 16));
 		txbCod.setColumns(10);
 		
+		/*Caixa de texto correspondente ao campo "telefone" da tabela*/
 		txbTelef = new JTextField();
+		txbTelef.setBounds(245, 234, 434, 24);
 		txbTelef.setFont(new Font("Arial", Font.PLAIN, 16));
 		txbTelef.setColumns(10);
 		
+		/*Caixa de texto correspondente ao campo "email" da tabela*/
 		txbEmail = new JTextField();
+		txbEmail.setBounds(245, 276, 434, 24);
 		txbEmail.setFont(new Font("Arial", Font.PLAIN, 16));
 		txbEmail.setColumns(10);
 		
 		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(29, 394, 886, 290);
 		
+		/*Botão que seleciona o primeiro registro da tabela e preenche as JTextField acima com seus respectivos dados*/
 		JButton btnFirst = new JButton("");
+		btnFirst.setBounds(69, 338, 33, 33);
 		btnFirst.setBorder(null);
 		btnFirst.setBackground(SystemColor.controlHighlight);
 		btnFirst.setIcon(new ImageIcon(frmTela.class.getResource("/img/icons/first.png")));
@@ -182,7 +201,9 @@ public class frmTela extends JFrame {
 			}
 		});
 		
+		/*Botão que seleciona o registro anterior, da tabela, ao atual selecionado e preenche as JTextField acima com seus respectivos dados*/
 		JButton btnPrevious = new JButton("");
+		btnPrevious.setBounds(112, 338, 33, 33);
 		btnPrevious.setIcon(new ImageIcon(frmTela.class.getResource("/img/icons/previous.png")));
 		btnPrevious.setBorder(null);
 		btnPrevious.setBackground(SystemColor.controlHighlight);
@@ -197,7 +218,9 @@ public class frmTela extends JFrame {
 			}
 		});
 		
+		/*Botão que seleciona o registro seguinte, da tabela, ao atual selecionado e preenche as JTextField acima com seus respectivos dados*/
 		JButton btnNext = new JButton("");
+		btnNext.setBounds(153, 338, 33, 33);
 		btnNext.setIcon(new ImageIcon(frmTela.class.getResource("/img/icons/next.png")));
 		btnNext.setBorder(null);
 		btnNext.setBackground(SystemColor.controlHighlight);
@@ -212,7 +235,9 @@ public class frmTela extends JFrame {
 			}
 		});
 		
+		/*Botão que seleciona o último registro da tabela e preenche as JTextField acima com seus respectivos dados*/
 		JButton btnLast = new JButton("");
+		btnLast.setBounds(196, 338, 33, 33);
 		btnLast.setIcon(new ImageIcon(frmTela.class.getResource("/img/icons/last.png")));
 		btnLast.setBorder(null);
 		btnLast.setBackground(SystemColor.controlHighlight);
@@ -277,78 +302,95 @@ public class frmTela extends JFrame {
 		preencherTabela();
 		posicionarRegistro();
 		tblClientes.setAutoCreateRowSorter(true);
-		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(64)
-					.addComponent(lblCod)
-					.addGap(109)
-					.addComponent(txbCod, GroupLayout.PREFERRED_SIZE, 434, GroupLayout.PREFERRED_SIZE))
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(64)
-					.addComponent(lblNome)
-					.addGap(120)
-					.addComponent(txbNome, GroupLayout.PREFERRED_SIZE, 434, GroupLayout.PREFERRED_SIZE))
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(64)
-					.addComponent(lblDtNasc)
-					.addComponent(txbDtNasc, GroupLayout.PREFERRED_SIZE, 434, GroupLayout.PREFERRED_SIZE))
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(64)
-					.addComponent(lblTelef)
-					.addGap(95)
-					.addComponent(txbTelef, GroupLayout.PREFERRED_SIZE, 434, GroupLayout.PREFERRED_SIZE))
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(64)
-					.addComponent(lblEmail, GroupLayout.PREFERRED_SIZE, 56, GroupLayout.PREFERRED_SIZE)
-					.addGap(120)
-					.addComponent(txbEmail, GroupLayout.PREFERRED_SIZE, 434, GroupLayout.PREFERRED_SIZE))
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(64)
-					.addComponent(btnFirst)
-					.addGap(10)
-					.addComponent(btnPrevious)
-					.addGap(8)
-					.addComponent(btnNext)
-					.addGap(10)
-					.addComponent(btnLast))
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(24)
-					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 886, GroupLayout.PREFERRED_SIZE))
-		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addGap(77)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblCod)
-						.addComponent(txbCod, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE))
-					.addGap(30)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblNome)
-						.addComponent(txbNome, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE))
-					.addGap(25)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblDtNasc)
-						.addComponent(txbDtNasc, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE))
-					.addGap(25)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblTelef)
-						.addComponent(txbTelef, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblEmail)
-						.addComponent(txbEmail, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE))
-					.addGap(38)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(btnFirst)
-						.addComponent(btnPrevious)
-						.addComponent(btnNext)
-						.addComponent(btnLast))
-					.addGap(23)
-					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 290, GroupLayout.PREFERRED_SIZE))
-		);
-		contentPane.setLayout(gl_contentPane);
+		
+		/*Botão que limpa os campos para digitação de novo registro*/
+		JButton btnNew = new JButton("");
+		btnNew.setBounds(519, 338, 33, 33);
+		btnNew.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		btnNew.setBackground(SystemColor.controlHighlight);
+		
+		/*Botão que cadastra novo registro digitado*/
+		JButton btnSubmit = new JButton("");
+		btnSubmit.setBounds(562, 338, 33, 33);
+		btnSubmit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		btnSubmit.setBackground(SystemColor.controlHighlight);
+		
+		
+		/*Botão que altera registro existente, ou cadastra novo em caso de código (cod) não preenchido*/
+		JButton btnChange = new JButton("");
+		btnChange.setBounds(603, 338, 33, 33);
+		btnChange.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		btnChange.setBackground(SystemColor.controlHighlight);
+		
+		/*Botão quer deleta registro existente*/
+		JButton btnDelete = new JButton("");
+		btnDelete.setBounds(646, 338, 33, 33);
+		btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		btnDelete.setBackground(SystemColor.controlHighlight);
+		
+		/*Botão que fecha a aplicação*/
+		JButton btnExit = new JButton("");
+		btnExit.setBounds(882, 338, 33, 33);
+		btnExit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		btnExit.setBackground(SystemColor.controlHighlight);
+		
+		/*Caixa de texto para fazer a busca de registros pelo campo "nome"*/
+		txbSearch = new JTextField();
+		txbSearch.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+			}
+		});
+		txbSearch.setBounds(309, 729, 319, 24);
+		txbSearch.setText((String) null);
+		txbSearch.setFont(new Font("Arial", Font.PLAIN, 14));
+		txbSearch.setColumns(10);
+		
+		JLabel lblSearch = new JLabel("Pesquise pelo nome do cliente:");
+		lblSearch.setBounds(309, 700, 203, 23);
+		lblSearch.setFont(new Font("Arial", Font.PLAIN, 15));
+		contentPane.setLayout(null);
+		contentPane.add(lblCod);
+		contentPane.add(txbCod);
+		contentPane.add(lblNome);
+		contentPane.add(txbNome);
+		contentPane.add(lblDtNasc);
+		contentPane.add(txbDtNasc);
+		contentPane.add(lblTelef);
+		contentPane.add(txbTelef);
+		contentPane.add(lblEmail);
+		contentPane.add(txbEmail);
+		contentPane.add(btnFirst);
+		contentPane.add(btnPrevious);
+		contentPane.add(btnNext);
+		contentPane.add(btnLast);
+		contentPane.add(btnNew);
+		contentPane.add(btnSubmit);
+		contentPane.add(btnChange);
+		contentPane.add(btnDelete);
+		contentPane.add(btnExit);
+		contentPane.add(scrollPane);
+		contentPane.add(txbSearch);
+		contentPane.add(lblSearch);
 	}
 }
